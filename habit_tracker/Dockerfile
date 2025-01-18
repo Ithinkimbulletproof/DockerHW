@@ -8,17 +8,13 @@ COPY pyproject.toml poetry.lock ./
 
 RUN poetry install --no-dev
 
-FROM python:3.12-slim
-
+FROM python:3.11-slim
 WORKDIR /app
-
-COPY pyproject.toml ./
-
+COPY pyproject.toml .
 RUN pip install --upgrade pip
 RUN pip install poetry
 RUN poetry config virtualenvs.create false
 RUN poetry install --no-root
-
 COPY . .
 COPY --from=builder /app /app
 COPY --from=builder /root/.cache/pypoetry/virtualenvs /root/.cache/pypoetry/virtualenvs
