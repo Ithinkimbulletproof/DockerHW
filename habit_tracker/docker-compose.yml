@@ -4,7 +4,7 @@ services:
   web:
     build: .
     command: >
-      bash -c "wait-for-it db:5432 -- python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+      bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     env_file:
       - .env
     environment:
@@ -33,7 +33,7 @@ services:
   celery:
     build: .
     command: >
-      bash -c "wait-for-it db:5432 -- celery -A config worker --loglevel=info --pool=eventlet"
+      bash -c "celery -A config worker --loglevel=info --pool=eventlet"
     env_file:
       - .env
     depends_on:
@@ -45,7 +45,7 @@ services:
     env_file:
       - .env
     command: >
-      bash -c "wait-for-it db:5432 -- celery -A config beat --loglevel=info"
+      bash -c "celery -A config beat --loglevel=info"
     depends_on:
       - redis
       - db
